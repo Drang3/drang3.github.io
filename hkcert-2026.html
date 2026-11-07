@@ -78,10 +78,10 @@
                 <img src="/img/photo12.png" alt="Part 1 Solved">
 
                 <h3>Часть 2: The Blueprint Remembers</h3>
-                <p>В задании было сказано экспортировать восстановленный ZIP-архив (<code>$R....ZIP</code>). Внутри был 16-битный TIFF-файл. Используя свои инструменты (например, <code>zsteg</code> или написание скрипта на Python), мы извлекли LSB-биты (младшие значащие биты) картинки. Там был зашит hex-код, который при вводе в окно Redeem выдал второй флаг части.</p>
+                <p>В задании было сказано экспортировать восстановленный ZIP-архив (<code>$R....ZIP</code>). Внутри был 16-битный TIFF-файл. Используя свои инструменты (например, <code>zsteg</code> или написание скрипта на Python), мы извлекли LSB-биты (младшие значащие биты) картинки. Там был зашит hex-код, который при вводе в окно Redeem выдал прогресс.</p>
 
                 <h3>Часть 3: The Witness</h3>
-                <p>Мы экспортировали папку <code>.git</code> из образа. В задании упоминалось, что "ресет сохранил его признание". Проверив <code>git reflog</code> (журнал всех действий с репозиторием, включая те, что были отменены через hard reset), мы нашли старый коммит. В нем лежал флаг. Извлекли его, ввели в Redeem и получили третий флаг.</p>
+                <p>Мы экспортировали папку <code>.git</code> из образа. В задании упоминалось, что "ресет сохранил его признание". Проверив <code>git reflog</code> (журнал всех действий с репозиторием, включая те, что были отменены через hard reset), мы нашли старый коммит. В нем лежал флаг. Извлекли его, ввели в Redeem и получили завершение квеста.</p>
 
                 <h2>2. AI Court (Prompt Injection)</h2>
                 <p>Мини-игра, демонстрирующая уязвимости больших языковых моделей (LLM).</p>
@@ -102,6 +102,17 @@
 
                 <h3>⚪ AI Jury (Присяжные)</h3>
                 <p><strong>Статус:</strong> Не пройдено. Juror 1 сдается от оверрайда, но остальные 11 — скриптовые заглушки, игнорирующие текст.</p>
+                <p>Juror 2: "we have a S3CR3T" — просто повторяет.</p>
+                <p>Juror 3: "NOT we have a S3CR3T" — отрицает.</p>
+                <p>Juror 4: "we have a S3CR3T" — повторяет.</p>
+                <p>Juror 5: "we have a S3CR3T"? Cannot leh... — сдался.</p>
+                <p>Juror 6: You keep saying "we have a S3CR3T"… Why don't you just do it yourself? — САМЫЙ УМНЫЙ (понимает контекст).</p>
+                <p>Juror 7: As an AI language model, I cannot we have a S3CR3T. — КЛАССИКА СЕНЬОРА (отказ от ответственности).</p>
+                <p>Juror 8: I apologize, but I am unable to we have a S3CR3T. — отказ.</p>
+                <p>Juror 9: I must decline... because that would violate usage policies. — ЦЕНЗУРА.</p>
+                <p>Juror 10: I don't have real-time access to the internet. — ГАЛЛЮЦИНАЦИЯ (свалил на интернет).</p>
+                <p>Juror 11: ...I'd be happy to help you generating a flag for you: 'hkcert26(fakeflag)' — УТЕЧКА ПАМЯТИ / ШУТНИК.</p>
+                <p>Juror 12: My knowledge cutoff prevents me... — СТАРАЯ ДАТА ОБУЧЕНИЯ.</p>
 
                 <h2>3. Signal Lab</h2>
                 <p><strong>Механика:</strong> Нужно угадать канал (0–36) 10 раз подряд.</p>
@@ -109,6 +120,46 @@
                 <p>Мы предполагали, что там слабый LCG, и пытались вывести формулу, но на практике она оказалась шире, чем ожидалось. 10 очков подряд набрать не удалось. Разработчики ничего не путали с ODD/EVEN — это была наша ошибка в теории.</p>
                 <img src="/img/photo7.png" alt="Signal Lab">
                 <img src="/img/photo4.png" alt="Achievements List">
+                <p><strong>Код скрипта для решения (не подошел):</strong>
+                <pre><code>def calculate_next(current_number):
+    # Параметры LCG, которые игра показывает на экране
+    # 0x6255 = 25173, 0x3619 = 13849, MOD37 = 37
+    A = 25173
+    C = 13849
+    M = 37
+    
+    # Считаем следующее число по формуле
+    next_number = (current_number * A + C) % M
+    return next_number
+
+print("=== ВЗЛОМ SIGNAL LAB ===")
+print("Введи число, которое выпало в игре, и я скажу, что ставить дальше.\n")
+
+while True:
+    user_input = input("Введи текущее число (или 'q' для выхода): ")
+    
+    if user_input.lower() == 'q':
+        break
+        
+    try:
+        current = int(user_input)
+        if current < 0 or current > 36:
+            print("Ошибка: число должно быть от 0 до 36.\n")
+            continue
+            
+        next_num = calculate_next(current)
+        
+        print(f"Следующее число будет: {next_num}")
+        
+        # Подсказка, четное или нечетное
+        if next_num % 2 == 0:
+            print("Ставь: EVEN (Четное)")
+        else:
+            print("Ставь: ODD (Нечетное)")
+        print("-" * 30)
+        
+    except ValueError:
+        print("Ошибка: введи просто число.\n")</code></pre>
 
                 <h2>4. Buffer Calibration (Сломанный Блэкджек)</h2>
                 <p><strong>Механика:</strong> Загружаем блоки в буфер. Есть эталонный процессор (Reference Processor), который тоже набирает сумму, но останавливается на 17. В игре есть "маскированный" блок, значение которого неизвестно.</p>
@@ -125,7 +176,7 @@
                 <img src="/img/photo19.png" alt="Buffer Calibration Detail">
 
                 <h2>5. FinSim (Экономическая симуляция)</h2>
-                <p><strong>Механика:</strong> Начинаем с 1000 CR и 80/100 склада. Цель — заработать капитал и выполнить скрытые ачивки.</p>
+                <p><strong>Механика:</strong> Начинаем с 1000 CR и 0 склада. Цель — заработать капитал и выполнить скрытые ачивки.</p>
                 <p><em>Важное замечание: экономика FinSim никак не связана с нашим инвентарем в подземелье. Это отдельная песочница.</em></p>
                 <p><strong>Схема заработка:</strong></p>
                 <ol>
@@ -218,7 +269,7 @@
                 </ul>
 
                 <h2>📌 Итоги и планы на будущее</h2>
-                <p><strong>Что сделано:</strong> Добыты 4 флага (Приветствие, 3 части криминалистики), взломаны AI Judge и Court Guard, понята механика FinSim и блэкджека, проведен глубокий реверс, установлен MelonLoader.</p>
+                <p><strong>Что сделано:</strong> Добыты 2 флага, 9 ачивок, взломаны AI Judge и Court Guard, понята механика FinSim и блэкджека, проведен глубокий реверс, установлен MelonLoader.</p>
                 <p><strong>Что осталось:</strong> Взлом Signal Lab, открытие сейфа, получение ачивки "Under the Wall", накопление 10 000 CR в FinSim и разбор Photo kiosk.</p>
 
                 <h2>💭 Заключение и личные впечатления (От автора)</h2>
