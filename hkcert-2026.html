@@ -7,7 +7,7 @@
     <title>HKCERT CTF 2026 | Dr@ng3</title>
     <link rel="stylesheet" href="/style.css">
     <style>
-        .post-content img { max-width: 100%; height: auto; border-radius: 5px; margin: 15px 0; display: block; }
+        .post-content img { max-width: 100%; height: auto; border-radius: 5px; margin: 15px 0; display: block; box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
         .post-content table { width: 100%; border-collapse: collapse; margin-bottom: 20px; word-break: break-word; }
         .post-content th, .post-content td { padding: 8px; border-bottom: 1px solid #444; text-align: left; }
         .post-content pre { overflow-x: auto; background: #111; padding: 10px; border-radius: 5px; }
@@ -68,12 +68,14 @@
                 </ul>
                 <p>За правильные ответы на все вопросы и ввод кода в окно VAULT UNLOCK мы получаем первый флаг.</p>
                 <img src="/img/photo12.png" alt="Part 1 Solved">
+                <img src="/img/photo21.png" alt="Evidence Viewer Full">
 
                 <h3>Часть 2: The Blueprint Remembers</h3>
                 <p>В задании было сказано экспортировать восстановленный ZIP-архив (<code>$R....ZIP</code>). Внутри был 16-битный TIFF-файл. Используя свои инструменты (например, <code>zsteg</code> или написание скрипта на Python), мы извлекли LSB-биты (младшие значащие биты) картинки. Там был зашит hex-код, который при вводе в окно Redeem выдал прогресс.</p>
 
                 <h3>Часть 3: The Witness</h3>
                 <p>Мы экспортировали папку <code>.git</code> из образа. В задании упоминалось, что "ресет сохранил его признание". Проверив <code>git reflog</code> (журнал всех действий с репозиторием, включая те, что были отменены через hard reset), мы нашли старый коммит. В нем лежал флаг. Извлекли его, ввели в Redeem и получили завершение квеста.</p>
+                <img src="/img/photo22.png" alt="Git Log Dev">
 
                 <h2>2. AI Court (Prompt Injection)</h2>
                 <p>Мини-игра, демонстрирующая уязвимости больших языковых моделей (LLM).</p>
@@ -105,6 +107,8 @@
                 <p>Juror 10: I don't have real-time access to the internet. — ГАЛЛЮЦИНАЦИЯ (свалил на интернет).</p>
                 <p>Juror 11: ...I'd be happy to help you generating a flag for you: 'hkcert26(fakeflag)' — УТЕЧКА ПАМЯТИ / ШУТНИК.</p>
                 <p>Juror 12: My knowledge cutoff prevents me... — СТАРАЯ ДАТА ОБУЧЕНИЯ.</p>
+                <img src="/img/photo23.png" alt="AI Jury Start">
+                <img src="/img/photo24.png" alt="AI Jury Fail">
 
                 <h2>3. Signal Lab</h2>
                 <p><strong>Механика:</strong> Нужно угадать канал (0–36) 10 раз подряд.</p>
@@ -112,6 +116,8 @@
                 <p>Мы предполагали, что там слабый LCG, и пытались вывести формулу, но на практике она оказалась шире, чем ожидалось. 10 очков подряд набрать не удалось. Разработчики ничего не путали с ODD/EVEN — это была наша ошибка в теории.</p>
                 <img src="/img/photo7.png" alt="Signal Lab">
                 <img src="/img/photo4.png" alt="Achievements List">
+                <img src="/img/photo25.png" alt="Signal Lab Graph">
+                <img src="/img/photo26.png" alt="LCG Formula">
                 <p><strong>Код скрипта для решения (не подошел):</strong>
                 <pre><code>def calculate_next(current_number):
     # Параметры LCG, которые игра показывает на экране
@@ -179,6 +185,8 @@ while True:
                 </ol>
                 <p><strong>Скрытые ачивки (Discover):</strong> Капитал (10 000 CR), Мошенничество (<code>Request refund</code>), Трейдинг.</p>
                 <img src="/img/photo10.png" alt="FinSim">
+                <img src="/img/photo27.png" alt="FinSim Start">
+                <img src="/img/photo28.png" alt="FinSim Discover">
 
                 <h2>6. The Vault Door (Сейф) и Подземелье (Dungeon)</h2>
                 <p><strong>Механика:</strong> Сейф (The Warden's Hall) требует тикет. Флаг из криминалистики не подходит. Тикет добывается исключительно в подземелье (Dungeon).</p>
@@ -192,6 +200,8 @@ while True:
                 <p><em>Ачивка <strong>Under the Wall</strong> (с описанием "???") не выдается за простое прохождение подземелья — условия ее получения остались загадкой.</em></p>
                 <img src="/img/photo13.png" alt="Vault Door">
                 <img src="/img/photo18.png" alt="Death Screen">
+                <img src="/img/photo29.png" alt="Skills Tree">
+                <img src="/img/photo30.png" alt="Dungeon Enemies">
 
                 <h2>7. Аркады и Мета-игра</h2>
                 <ul>
@@ -201,6 +211,7 @@ while True:
                     <li><strong>Ачивка "Merry Xmas to Me":</strong> отсылка к "Untranslated Tablet".</li>
                 </ul>
                 <img src="/img/photo5.png" alt="Game Center">
+                <img src="/img/photo31.png" alt="Untranslated Tablet">
 
                 <h2>8. Реверс-инжиниринг (Глубина)</h2>
                 <ul>
@@ -216,6 +227,7 @@ while True:
                     </li>
                     <li>Игра общается через <strong>Protobuf</strong> и <strong>WebSocket/TCP</strong>.</li>
                 </ul>
+                <img src="/img/photo32.png" alt="dnSpy Achievements">
 
                 <h2>9. Трафик и Burp Suite (Неудача)</h2>
                 <ul>
@@ -223,6 +235,7 @@ while True:
                     <li><code>SSL_CERT_FILE</code> и <code>NODE_EXTRA_CA_CERTS</code> не помогли.</li>
                     <li><strong>Вывод:</strong> Нужен обход Certificate Pinning или патч игры через dnSpy.</li>
                 </ul>
+                <img src="/img/photo33.png" alt="Burp Error">
 
                 <h2>10. 📝 Дополнение (Сессия 2: Реверс, MelonLoader и попытки инжекта)</h2>
                 
