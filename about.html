@@ -1,43 +1,61 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22black%22/><path d=%22M20 30 H80 V60 H70 V70 H60 V60 H40 V70 H30 V60 H20 Z M35 40 H45 V50 H35 Z M55 40 H65 V50 H55 Z M45 55 H55 V60 H45 Z%22 fill=%22%2300ffcc%22/></svg>">
-    <title>About | Dr@ng3</title>
-    <link rel="stylesheet" href="/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About | Dr@ng3</title>
+<meta name="description" content="Dr@ng3 (a.k.a. Drange): CyberSecurity Specialist и CTF-игрок.">
+<meta name="theme-color" content="#04050c">
+<meta property="og:title" content="About | Dr@ng3">
+<meta property="og:description" content="Dr@ng3 (a.k.a. Drange): CyberSecurity Specialist и CTF-игрок.">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&amp;family=Play:wght@400;700&amp;display=swap">
+<link rel="stylesheet" href="style.css">
+<script>try{var t=localStorage.getItem('drang3-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 </head>
 <body>
-    <canvas id="matrix"></canvas>
-    <div class="container">
-        <header>
-            <div class="logo">>_ Dr@ng3</div>
-            <nav>
-                <a href="/index.html">Home</a>
-                <a href="/writeups.html">Writeups</a> 
-                <a href="/about.html" class="active">About</a>
-            </nav>
-        </header>
-
-        <section class="content-section">
-            <h2 class="glitch" data-text="ABOUT ME">ABOUT ME</h2>
-            <div class="about-container">
-                <img src="/avatar.jpg" alt="Dr@ng3" class="avatar">
-                <div class="about-text">
-                    <p><strong>Dr@ng3 (a.k.a. Drange).</strong></p>
-                    <p>CyberSecurity Specialist & CTF Player. Специализируюсь на уязвимостях, пентестах - Сети, Веб, Эксплойты, Осинт, Инфраструкура, Форензика.</p>
-                    <p>Этот сайт — мой цифровой след. Здесь я документирую свой путь в кибербезопасности, разбираю уязвимости и делюсь опытом решения лабораторий. Никаких секретов, только чистый код и логика.</p>
-                    <div class="socials">
-                        <a href="https://github.com/Drang3" target="_blank">GitHub</a>
-                        <a href="https://tryhackme.com/p/Drang3" target="_blank">TryHackMe</a>
-                        <a href="https://profile.hackthebox.com/profile/01a1a224-58e1-7096-b485-9b931cf62163" target="_blank">HackTheBox</a>
-                        <a href="mailto:drangexrr@gmail.com">Email</a>
-                    </div>
-                </div>
-            </div>
-        </section>
+<a class="skip" href="#main">К содержимому</a>
+<header class="site"><div class="wrap bar">
+  <a class="logo" href="index.html" aria-label="Dr@ng3, главная"><span class="pr">&gt;_</span> Dr@ng3</a>
+  <nav class="main" aria-label="Основная">
+    <a href="index.html">Home</a>
+    <a href="writeups.html">Writeups</a>
+    <a href="about.html" aria-current="page">About</a>
+  </nav>
+  <button class="theme-btn" id="themeBtn" type="button" aria-label="Сменить цвет интерфейса" title="Сменить цвет"><span></span></button>
+</div></header>
+<svg class="defs" aria-hidden="true" focusable="false"><defs>
+<filter id="ch-r" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0"/></filter>
+<filter id="ch-g" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0"/></filter>
+<filter id="ch-b" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0"/></filter>
+</defs></svg>
+<main id="main" class="wrap">
+  <div class="page-head"><h1 class="neon-text">About</h1></div>
+  <section class="about" aria-label="Обо мне" style="margin-top:28px">
+    <div class="frame hero-art"><div class="aberr" role="img" aria-label="Dr@ng3: кибер-кот с оранжевым глазом, глитч-эффектом и неоновым контуром">
+      <img class="base" src="avatar-800.jpg" alt="" width="800" height="800" fetchpriority="high">
+      <img class="ch ch-r" src="avatar-800.jpg" alt="" aria-hidden="true" width="800" height="800">
+      <img class="ch ch-g" src="avatar-800.jpg" alt="" aria-hidden="true" width="800" height="800">
+      <img class="ch ch-b" src="avatar-800.jpg" alt="" aria-hidden="true" width="800" height="800">
+      <img class="sl2 r" src="avatar-800.jpg" alt="" aria-hidden="true" width="800" height="800">
+      <img class="sl2 b" src="avatar-800.jpg" alt="" aria-hidden="true" width="800" height="800">
+    </div></div>
+    <div class="about-text">
+      <p class="name neon-text">Dr@ng3 (a.k.a. Drange)</p>
+      <p>CyberSecurity Specialist &amp; CTF Player. Специализируюсь на уязвимостях и пентестах.</p>
+      <ul class="focus" aria-label="Направления"><li>Сети</li><li>Веб</li><li>Эксплойты</li><li>OSINT</li><li>Инфраструктура</li><li>Форензика</li></ul>
+      <p>Этот сайт &mdash; мой цифровой след. Здесь я документирую свой путь в кибербезопасности, разбираю уязвимости и делюсь опытом решения лабораторий. Никаких секретов, только чистый код и логика.</p>
+      <div class="profiles"><div class="frame profile"><div><a href="https://github.com/Drang3" target=_blank rel="noopener noreferrer"><b>GitHub</b><span>github.com/Drang3</span></a></div></div><div class="frame profile"><div><a href="https://tryhackme.com/p/Drang3" target=_blank rel="noopener noreferrer"><b>TryHackMe</b><span>Drang3</span></a></div></div><div class="frame profile"><div><a href="https://profile.hackthebox.com/profile/01a1a224-58e1-7096-b485-9b931cf62163" target=_blank rel="noopener noreferrer"><b>HackTheBox</b><span>профиль</span></a></div></div><div class="frame profile"><div><a href="mailto:drangexrr@gmail.com"><b>Email</b><span>drangexrr@gmail.com</span></a></div></div></div>
     </div>
-    <script src="/script.js"></script>
+  </section>
+</main>
+<footer class="site"><div class="wrap">
+  <span>Dr@ng3 // Cyber Range &copy; 2026</span>
+  <ul><li><a href="https://github.com/Drang3" target=_blank rel="noopener noreferrer">GitHub</a></li><li><a href="https://tryhackme.com/p/Drang3" target=_blank rel="noopener noreferrer">TryHackMe</a></li><li><a href="https://profile.hackthebox.com/profile/01a1a224-58e1-7096-b485-9b931cf62163" target=_blank rel="noopener noreferrer">HackTheBox</a></li><li><a href="mailto:drangexrr@gmail.com">Email</a></li></ul>
+</div></footer>
+<script src="script.js"></script>
 </body>
 </html>
