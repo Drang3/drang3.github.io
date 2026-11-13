@@ -1,40 +1,100 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22black%22/><path d=%22M20 30 H80 V60 H70 V70 H60 V60 H40 V70 H30 V60 H20 Z M35 40 H45 V50 H35 Z M55 40 H65 V50 H55 Z M45 55 H55 V60 H45 Z%22 fill=%22%2300ffcc%22/></svg>">
-    <title>Dr@ng3 // Cyber Range</title>
-    <link rel="stylesheet" href="/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dr@ng3 // Cyber Range</title>
+<meta name="description" content="Dr@ng3: CTF-райтапы и путь в кибербезопасности. Разборы лабораторий и турниров.">
+<meta name="theme-color" content="#04050c">
+<meta property="og:title" content="Dr@ng3 // Cyber Range">
+<meta property="og:description" content="Dr@ng3: CTF-райтапы и путь в кибербезопасности. Разборы лабораторий и турниров.">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&amp;family=Play:wght@400;700&amp;display=swap">
+<link rel="stylesheet" href="style.css">
+<script>try{var t=localStorage.getItem('drang3-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+<link rel="preload" as="image" href="avatar-800.jpg">
 </head>
 <body>
-    <canvas id="matrix"></canvas>
-
-    <div class="container">
-        <header>
-            <div class="logo">>_ Dr@ng3</div>
-            <nav>
-                <a href="/index.html" class="nav-link active">Home</a>
-                <a href="/writeups.html" class="nav-link">Writeups</a>
-                <a href="/about.html" class="nav-link">About</a>
-            </nav>
-        </header>
-
-        <main id="home" style="display: flex; justify-content: center; margin-top: 50px;">
-            <div class="terminal" style="width: 100%; max-width: 800px;">
-                <div class="term-header">
-                    <span>root@drang3:~#</span>
-                </div>
-                <div class="term-body" id="typewriter">
-                    <!-- Текст печатается через JS --> 
-                </div>
-            </div>
-        </main>
+<a class="skip" href="#main">К содержимому</a>
+<header class="site"><div class="wrap bar">
+  <a class="logo" href="index.html" aria-label="Dr@ng3, главная"><span class="pr">&gt;_</span> Dr@ng3</a>
+  <nav class="main" aria-label="Основная">
+    <a href="index.html" aria-current="page">Home</a>
+    <a href="writeups.html">Writeups</a>
+    <a href="about.html">About</a>
+  </nav>
+  <button class="theme-btn" id="themeBtn" type="button" aria-label="Сменить цвет интерфейса" title="Сменить цвет"><span></span></button>
+</div></header>
+<svg class="defs" aria-hidden="true" focusable="false"><defs>
+<filter id="ch-r" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0"/></filter>
+<filter id="ch-g" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0"/></filter>
+<filter id="ch-b" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0"/></filter>
+</defs></svg>
+<main id="main" class="wrap">
+  <section class="hero" aria-labelledby="h1">
+    <div class="hero-copy">
+      <!-- Добавлен класс neon-text для переливающегося градиента -->
+      <h1 id="h1" class="glitch-h neon-text" data-text="Cyber Range">Cyber Range</h1>
+      <p class="lead">Документирую путь в кибербезопасности: разбираю уязвимости и делюсь опытом решения лабораторий.</p><p>Ни одна система не может быть на 100% защищена. Не забывайте об этом.</p>
+      <div class="btn-row">
+        <a class="btn primary" href="writeups.html">Читать райтапы</a>
+        <a class="btn ghost" href="about.html">Обо мне</a>
+      </div>
+      <div class="frame term" role="region" aria-label="Терминал">
+        <div>
+          <div class="term-bar"><span>root@drang3:~#</span><span class="on">online</span></div>
+          <div id="out" role="log" aria-live="off" tabindex="0" aria-label="Вывод терминала"><noscript><p class="line">root@drang3:~# whoami<br>Dr@ng3 (a.k.a. Drange)<br>CyberSecurity Specialist &amp; CTF Player</p></noscript></div>
+          <form id="cmd" autocomplete="off">
+            <label for="in">root@drang3:~#</label>
+            <input id="in" type="text" placeholder="help" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Командная строка терминала">
+          </form>
+        </div>
+      </div>
     </div>
-    <script src="/script.js"></script>
+    <div class="frame hero-art"><div class="aberr" role="img" aria-label="Dr@ng3: кибер-кот с оранжевым глазом, глитч-эффектом и неоновым контуром">
+      <img class="base" src="avatar-800.jpg" alt="" width="800" height="800" fetchpriority="high">
+      <img class="ch ch-r" src="avatar-800.jpg" alt="" aria-hidden="true" width="800" height="800">
+      <img class="ch ch-g" src="avatar-800.jpg" alt="" aria-hidden="true" width="800" height="800">
+      <img class="ch ch-b" src="avatar-800.jpg" alt="" aria-hidden="true" width="800" height="800">
+      <img class="sl2 r" src="avatar-800.jpg" alt="" aria-hidden="true" width="800" height="800">
+      <img class="sl2 b" src="avatar-800.jpg" alt="" aria-hidden="true" width="800" height="800">
+    </div></div>
+  </section>
+
+  <section class="sec" aria-labelledby="latest">
+    <div class="sec-head">
+      <h2 id="latest" class="neon-text">Свежие райтапы</h2>
+      <a class="more" href="writeups.html">Все райтапы &gt;</a>
+    </div>
+    <div class="cards">
+<article class="frame card" data-slug="hkcert-2026" data-href="hkcert-2026.html" data-title="HKCERT CTF 2026: 401 Unauthorized" data-tags="forensics ai reverse unity" data-date="2026-11-06">
+  <div class="in">
+    <div class="top"><span class="badge">HKCERT CTF</span><time datetime="2026-11-06">6 ноября 2026</time></div>
+    <h3><a href="hkcert-2026.html">HKCERT CTF 2026: 401 Unauthorized</a></h3>
+    <p>Разбор турнира с Unity-игрой. Взлом LLM через Prompt Injection, криминалистика NTFS, реверс IL2CPP и анализ серверной валидации.</p>
+    <ul class="tags"><li class="t-forensics">#forensics</li><li class="t-ai">#ai</li><li class="t-reverse">#reverse</li><li class="t-unity">#unity</li></ul>
+    <span class="go" aria-hidden="true">Читать &gt;</span>
+  </div>
+</article>
+<article class="frame card" data-slug="wgel" data-href="wgel.html" data-title="Wgel CTF - TryHackMe" data-tags="web linux privesc" data-date="2026-11-05">
+  <div class="in">
+    <div class="top"><span class="badge">TryHackMe</span><time datetime="2026-11-05">5 ноября 2026</time></div>
+    <h3><a href="wgel.html">Wgel CTF - TryHackMe</a></h3>
+    <p>Разбор машины уровня Easy. Учимся находить скрытые файлы и использовать Wget для эксфильтрации данных.</p>
+    <ul class="tags"><li class="t-web">#web</li><li class="t-linux">#linux</li><li class="t-privesc">#privesc</li></ul>
+    <span class="go" aria-hidden="true">Читать &gt;</span>
+  </div>
+</article>
+    </div>
+  </section>
+</main>
+<footer class="site"><div class="wrap">
+  <span>Dr@ng3 // Cyber Range &copy; 2026</span>
+  <ul><li><a href="https://github.com/Drang3" target=_blank rel="noopener noreferrer">GitHub</a></li><li><a href="https://tryhackme.com/p/Drang3" target=_blank rel="noopener noreferrer">TryHackMe</a></li><li><a href="https://profile.hackthebox.com/profile/01a1a224-58e1-7096-b485-9b931cf62163" target=_blank rel="noopener noreferrer">HackTheBox</a></li><li><a href="mailto:drangexrr@gmail.com">Email</a></li></ul>
+</div></footer>
+<script src="script.js"></script>
 </body>
 </html>
