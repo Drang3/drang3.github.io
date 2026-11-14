@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Стеганография в JPEG: Cookies | Dr@ng3</title>
+<meta name="description" content="Разбор стеганографии в JPEG. Поиск скрытых данных в сжатом потоке изображения через strings, xxd и hex-редактор.">
+<meta name="theme-color" content="#04050c">
+<meta property="og:title" content="Стеганография в JPEG: Cookies | Dr@ng3">
+<meta property="og:description" content="Разбор стеганографии в JPEG. Поиск скрытых данных в сжатом потоке изображения.">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&amp;family=Play:wght@400;700&amp;display=swap">
+<link rel="stylesheet" href="style.css">
+<script>try{var t=localStorage.getItem('drang3-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#main">К содержимому</a>
+<header class="site"><div class="wrap bar">
+  <a class="logo" href="index.html" aria-label="Dr@ng3, главная"><span class="pr">&gt;_</span> Dr@ng3</a>
+  <nav class="main" aria-label="Основная">
+    <a href="index.html">Home</a>
+    <a href="writeups.html" aria-current="page">Writeups</a>
+    <a href="about.html">About</a>
+  </nav>
+  <button class="theme-btn" id="themeBtn" type="button" aria-label="Сменить цвет интерфейса" title="Сменить цвет"><span></span></button>
+</div></header>
+<div id="progress" aria-hidden="true"></div>
+<main id="main" class="wrap">
+  <div class="post-grid">
+    <article class="post">
+      <a class="back" href="writeups.html">&lt; Все райтапы</a>
+      <h1 class="post-title neon-text">Стеганография в JPEG: do_you_like_cookes.jpg</h1>
+      <div class="post-meta">
+        <span class="badge">Stego</span>
+        <time datetime="2026-11-14">14 ноября 2026</time>
+        <span id="rt"></span>
+        <ul class="tags"><li class="t-forensics">#forensics</li><li class="t-stego">#stego</li></ul>
+      </div>
+      <div class="post-content">
+
+<p>Этот разбор посвящен классической задаче на стеганографию в изображениях формата JPEG. Нам дан файл <code>do_you_like_cookes.jpg</code>, и наша цель — найти в нём скрытое сообщение или флаг.</p>
+
+<h2>1. Первичный анализ (Быстрые команды)</h2>
+<p>Первым делом нужно понять, с чем мы работаем, и проверить самые очевидные места. Начнем с проверки типа файла и его «хвоста».</p>
+
+<pre><code># Убеждаемся, что это действительно JPEG
+file image.jpg
+
+# Смотрим конец файла. Если видим ff d9 (End of Image) — значит, после картинки ничего не дописано
+xxd -s -32 image.jpg</code></pre>
+
+<p>Файл заканчивается на <code>ff d9</code>. Это значит, что никаких ZIP-архивов или текста после картинки нет. Данные спрятаны <strong>внутри</strong> самого файла.</p>
+
+<h2>2. Проверка метаданных и открытого текста</h2>
+<p>Следующий шаг — проверить EXIF-данные (комментарии, геолокацию и т.д.) и поискать обычные строки. Для этого используем <code>exiftool</code> и <code>strings</code>.</p>
+
+<pre><code>exiftool image.jpg
+strings -n 6 image.jpg | grep -iE "like|cookie|flag"</code></pre>
+
+<p><strong>Результат в консоли:</strong></p>
+<pre><code>I don't like potatos!</code></pre>
+
+<p>Флаг (или скрытое сообщение) найдено. Оно лежит прямо в бинарном потоке файла.</p>
+
+<img alt="Быстрые шаги через терминал" decoding="async" loading="lazy" src="img/cookie_1.png"/>
+
+<h2>3. Понимание техники (Что произошло?)</h2>
+<p>Почему <code>strings</code> сработал? Обычно JPEG-файл после маркера <code>FF DA</code> (Start of Scan) выглядит как сплошной бинарный мусор. Однако здесь байты флага были вручную вписаны в сжатый поток между RST-маркерами (маркерами синхронизации <code>FF D0–D7</code>).</p>
+<p>Если открыть файл через ImageMagick (<code>convert</code>), он начнет ругаться на <em>extraneous bytes before marker 0xdX</em>. Это верный признак ручной вставки данных.</p>
+
+<h2>4. Ручной поиск в Hex-редакторе</h2>
+<p>Если бы мы не знали, что искать, или <code>strings</code> не сработал, флаг можно найти глазами. Открываем файл в hex-редакторе (например, <code>xxd image.jpg | less</code> или HxD на Windows).</p>
+<p>Скроллим файл и смотрим на правую колонку (ASCII). Прямо посреди «кракозябр» (в районе смещения <code>0x3d76</code>) взгляд зацепится за четкую английскую фразу:</p>
+
+<pre><code>00003d90:  33b3 2ed1 4a34 9798 3191 de74 249d 705b  3...J4..1..t$.p[
+00003da0:  646f 6e27 7420 6c69 6b65 2070 6f74 6174  don't like potat
+00003db0:  6f73 210a 7628 f5b6 7c35 332c 9b69 fddf  os!.v(..|53,.i..</code></pre>
+
+<p>Выделяем байты <code>64 6f 6e 27 74</code> и копируем. Получаем <code>I don't like potatos!</code></p>
+
+<img alt="Ручной поиск в hex-редакторе" decoding="async" loading="lazy" src="img/cookie_2.png"/>
+
+<h2>5. Итог</h2>
+<p>Флаг: <span aria-label="Флаг скрыт" class="redacted" role="img">████████████████████</span> (I don't like potatos!)</p>
+<p>Задача отлично демонстрирует, что не всегда нужны сложные скрипты. Иногда достаточно знать, как работает структура файла, и уметь пользоваться базовыми утилитами.</p>
+
+      </div>
+      <nav class="pager" aria-label="Другие райтапы"><div class="frame"><div><a class="prev" href="wgel.html"><small>&lt; Раньше</small>Wgel CTF - TryHackMe</a></div></div></nav>
+    </article>
+    <aside class="toc" aria-label="Содержание"><details open><summary>Содержание</summary><ol id="toc"></ol></details></aside>
+  </div>
+</main>
+<footer class="site"><div class="wrap">
+  <span>Dr@ng3 // Cyber Range &copy; 2026</span>
+  <ul><li><a href="https://github.com/Drang3" target=_blank rel="noopener noreferrer">GitHub</a></li><li><a href="https://tryhackme.com/p/Drang3" target=_blank rel="noopener noreferrer">TryHackMe</a></li><li><a href="https://profile.hackthebox.com/profile/01a1a224-58e1-7096-b485-9b931cf62163" target=_blank rel="noopener noreferrer">HackTheBox</a></li><li><a href="mailto:drangexrr@gmail.com">Email</a></li></ul>
+</div></footer>
+<script src="script.js"></script>
+</body>
+</html>
