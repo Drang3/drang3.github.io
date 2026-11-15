@@ -1,0 +1,219 @@
+/* ==========================================================
+   Dr@ng3 // Writeup Builder (Cyberpunk Edition)
+   Стилизован под основной style.css сайта
+   ========================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Play:wght@400;700&display=swap');
+
+:root {
+  --bg: #04050c;
+  --bg2: #080b18;
+  --panel: rgba(10, 14, 30, .93);
+  --line: #1b2245;
+  --line-hi: #2c366b;
+  --text: #d3dbef;
+  --dim: #7b88b0;
+  --white: #f4f7ff;
+
+  --eye: #ff8a1f;
+  --cyan: #27e6ff;
+  --mag: #ff2bd6;
+  --lime: #a6ff3a;
+  --accent: var(--eye);
+
+  --display: "Play", "Segoe UI", system-ui, sans-serif;
+  --mono: "Fira Code", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --cut: 14px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--bg);
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(39, 230, 255, 0.05), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(255, 43, 214, 0.05), transparent 25%);
+  color: var(--text);
+  font: 400 15px/1.65 var(--mono);
+  -webkit-font-smoothing: antialiased;
+  padding: 40px 20px;
+}
+
+/* Скан-линии */
+body::after {
+  content: ""; position: fixed; inset: 0; z-index: 40; pointer-events: none;
+  background: repeating-linear-gradient(to bottom, transparent 0 2px, rgba(0, 0, 0, .16) 2px 3px);
+}
+
+/* --- Контейнер панели --- */
+.panel {
+  max-width: 900px;
+  margin: 0 auto;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 40px;
+  position: relative;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(255, 138, 31, 0.05);
+}
+
+/* Скошенный уголок для панели */
+.panel::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 50px; height: 50px;
+  background: linear-gradient(135deg, transparent 50%, var(--accent) 50%);
+  opacity: 0.3;
+  border-radius: 0 4px 0 0;
+}
+
+.panel-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.panel-head h1 {
+  font: 700 2rem/1.2 var(--display);
+  color: var(--white);
+  margin: 0 0 10px;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+}
+
+.panel-head h1 span {
+  color: var(--accent);
+  text-shadow: 0 0 10px var(--accent);
+}
+
+.panel-head p {
+  color: var(--dim);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* --- Формы --- */
+.form-group { margin-bottom: 22px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+label {
+  display: block;
+  color: var(--accent);
+  font-family: var(--display);
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+label code {
+  background: #0d1430;
+  padding: 2px 6px;
+  border-radius: 3px;
+  color: var(--cyan);
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+input[type="text"], input[type="date"], textarea {
+  width: 100%;
+  background: var(--bg2);
+  border: 1px solid var(--line);
+  color: var(--white);
+  padding: 12px 14px;
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  border-radius: 3px;
+  transition: all 0.2s;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 138, 31, 0.2);
+}
+
+input::placeholder, textarea::placeholder { color: var(--dim); opacity: 0.5; }
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.5;
+}
+
+textarea[readonly] {
+  background: #050505;
+  color: var(--cyan);
+  cursor: default;
+  border-color: #111;
+}
+
+/* --- Кнопки --- */
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin: 30px 0;
+}
+
+.btn {
+  --cut: 8px;
+  display: inline-block;
+  font: 700 0.95rem/1 var(--mono);
+  padding: 14px 24px;
+  border: none;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--accent);
+  background: var(--accent);
+  clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, var(--cut) 100%, 0 calc(100% - var(--cut)));
+  transition: filter 0.2s, box-shadow 0.2s;
+  box-shadow: 0 0 15px rgba(255, 138, 31, 0.2);
+}
+
+.btn.primary {
+  color: var(--bg);
+}
+
+.btn.ghost {
+  position: relative;
+  isolation: isolate;
+  background: transparent;
+  border: none;
+}
+
+.btn.ghost::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  z-index: -1;
+  background: var(--bg);
+  transition: background 0.2s;
+  clip-path: polygon(0 0, calc(100% - (var(--cut) - .4px)) 0, 100% calc(var(--cut) - .4px), 100% 100%, calc(var(--cut) - .4px) 100%, 0 calc(100% - (var(--cut) - .4px)));
+}
+
+.btn:hover { filter: brightness(1.15); box-shadow: 0 0 25px var(--accent); }
+.btn.ghost:hover { color: var(--bg); }
+.btn.ghost:hover::before { background: var(--accent); }
+
+.btn.small {
+  padding: 10px 16px;
+  font-size: 0.8rem;
+  margin-top: 10px;
+}
+
+/* --- Адаптив --- */
+@media (max-width: 600px) {
+  body { padding: 20px 10px; }
+  .panel { padding: 20px; }
+  .form-row { grid-template-columns: 1fr; gap: 0; }
+  .panel-head h1 { font-size: 1.5rem; }
+  .btn { width: 100%; text-align: center; }
+}
